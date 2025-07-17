@@ -8,22 +8,32 @@ export default function RecipeForm({ onAdd }) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		if (!title.trim() || !ingredients.trim() || !steps.trim()) {
+			alert("All fields are required.");
+			return;
+		}
+
 		try {
 			const res = await fetch("http://localhost:3001/api/recipes", {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
+				headers: {
+					"Content-Type": "application/json",
+				},
 				body: JSON.stringify({ title, ingredients, steps }),
 			});
 
-			const newRecipe = await res.json();
-			onAdd(newRecipe); // Add to list in parent
-			setTitle("");
-			setIngredients("");
-			setSteps("");
+			if (!res.ok) {
+				throw new Error("Failed to add recipe.");
+			}
+
+			const data = await res.json();
+			onAdd(data);
 		} catch (err) {
-			console.error("Error adding recipe:", err);
+			console.error(err);
+			alert("An error occurred while submitting the recipe.");
 		}
 	};
+
 
 	return (
 		<form
