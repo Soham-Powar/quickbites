@@ -1,4 +1,6 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
+
 
 export default function RecipeForm({ onAdd }) {
 	const [title, setTitle] = useState("");
@@ -9,7 +11,7 @@ export default function RecipeForm({ onAdd }) {
 		e.preventDefault();
 
 		if (!title.trim() || !ingredients.trim() || !steps.trim()) {
-			alert("All fields are required.");
+			toast.error("All fields are required.");
 			return;
 		}
 
@@ -28,9 +30,10 @@ export default function RecipeForm({ onAdd }) {
 
 			const data = await res.json();
 			onAdd(data);
+			toast.success("Recipe added!");
 		} catch (err) {
 			console.error(err);
-			alert("An error occurred while submitting the recipe.");
+			toast.error("Something went wrong!");
 		}
 	};
 
