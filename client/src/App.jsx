@@ -9,18 +9,12 @@ import RecipeList from "./components/RecipeList";
 function App() {
   const [recipes, setRecipes] = useState([]);
 
-  const API_URL =
-    import.meta.env.DEV
-      ? "http://localhost:3001"
-      : import.meta.env.VITE_API_URL;
-
   useEffect(() => {
-    fetch(`${API_URL}/api/recipes`)
+    fetch("http://localhost:3001/api/recipes")
       .then((res) => res.json())
       .then((data) => setRecipes(data))
       .catch((err) => console.error("Error fetching recipes:", err));
   }, []);
-
 
   const addRecipe = (newRecipe) => {
     setRecipes((prev) => [newRecipe, ...prev]);
